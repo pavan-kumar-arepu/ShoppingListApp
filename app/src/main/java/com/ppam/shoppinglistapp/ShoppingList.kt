@@ -2,6 +2,8 @@ package com.ppam.shoppinglistapp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,13 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 class ShoppingList {
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListApp() {
 
@@ -71,7 +73,23 @@ fun ShoppingListApp() {
     
     if (showDialog) {
 
-        AlertDialog(onDismissRequest = { showDialog = false }, confirmButton = { /*TODO*/ }, title = { Text(text = "Add Shopping Text") }, text = {
+        AlertDialog(onDismissRequest = { showDialog = false },
+            confirmButton = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button(onClick = { /*TODO*/ }) {
+                                    Text(text = "Add")
+                                }
+
+                                Button(onClick = { /*TODO*/ }) {
+                                    Text(text = "Cancel")
+                                }
+                            }
+            },
+            title = { Text(text = "Add Shopping Text") },
+            text = {
                 Column {
                     OutlinedTextField(
                         value = itemName,
@@ -81,9 +99,19 @@ fun ShoppingListApp() {
                             .fillMaxWidth()
                             .padding(8.dp)
                     )
+
+                    OutlinedTextField(
+                        value = itemQuantity,
+                        onValueChange = { itemQuantity = it },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
                 }
-            }
-        )
+            },
+            containerColor = Color.LightGray
+            )
     }
 }
 
