@@ -79,19 +79,18 @@ fun ShoppingListApp() {
             items(sItems) {
                 item ->
                 if(item.isEditing) {
-                    ShoppingItemEditor(item = item, onEditCompletion = {
+                    ShoppingItemEditor(item = item, onEditComplete = {
                         editedName, editedQuantity ->
                         sItems = sItems.map{ it.copy(isEditing = false)}
                         val editedItem = sItems.find{it.id == item.id}
                         editedItem?.let {
-                            it.name = item.name
-                            it.quantity = item.quantity
+                            it.name = editedName
+                            it.quantity = editedQuantity
                         }
                     })
                 } else {
                     ShoppingListItem(item = item,
                         onEditClick = {
-//                            item.isEditing = true
                             sItems = sItems.map{it.copy(isEditing = it.id==item.id)}
                     }, onDeleteClick = {
                         sItems = sItems-item
@@ -167,59 +166,51 @@ data class ShoppingItem(val id:Int,
 )
 
 @Composable
-fun ShoppingItemEditor(item: ShoppingItem, onEditCompletion: (String, Int) -> Unit) {
-    var editedName by remember {
-        mutableStateOf(item.name)
-    }
-
-    var editedQuantity by remember {
-        mutableStateOf(item.quantity.toString())
-    }
-
-    var isEditing by remember {
-        mutableStateOf(item.isEditing)
-    }
+fun ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String, Int) -> Unit){
+    var editedName by remember { mutableStateOf(item.name) }
+    var editedQuantity by remember { mutableStateOf(item.quantity.toString()) }
+    var isEditing by remember { mutableStateOf(item.isEditing) }
 
     Row(modifier = Modifier
         .fillMaxWidth()
         .background(Color.White)
         .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly)
+        horizontalArrangement = Arrangement.SpaceEvenly
+    )
     {
         Column {
             BasicTextField(
-                value = editedName,
-                onValueChange = { editedName = it },
+                value= editedName,
+                onValueChange = {editedName = it},
                 singleLine = true,
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(8.dp)
+                modifier = Modifier.wrapContentSize().padding(8.dp)
             )
             BasicTextField(
-                value = editedQuantity,
-                onValueChange = { editedQuantity = it },
+                value= editedQuantity,
+                onValueChange = {editedQuantity = it},
                 singleLine = true,
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(8.dp)
+                modifier = Modifier.wrapContentSize().padding(8.dp)
             )
         }
 
         Button(
             onClick = {
                 isEditing = false
-                onEditCompletion(editedName, editedQuantity.toIntOrNull() ?: 1)
+                onEditComplete(editedName, editedQuantity.toIntOrNull() ?: 1)
             }
-        ) {
-            Text(text = "Save")
+        ){
+            Text("Save")
         }
     }
 }
 
+
 @Composable
-fun ShoppingListItem(item: ShoppingItem,
-                     onEditClick: () -> Unit,
-                     onDeleteClick: () -> Unit) {
+fun ShoppingListItem(
+    item: ShoppingItem,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+){
     Row(
         modifier = Modifier
             .padding(8.dp)
@@ -229,24 +220,18 @@ fun ShoppingListItem(item: ShoppingItem,
                 shape = RoundedCornerShape(20)
             ),
         horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+    ){
         Text(text = item.name, modifier = Modifier.padding(8.dp))
         Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
-
-            IconButton(onClick = { onEditClick }) {
+        Row(modifier = Modifier.padding(8.dp)){
+            IconButton(onClick = onEditClick){
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
             }
 
-            IconButton(onClick = { onDeleteClick} ) {
+            IconButton(onClick = onDeleteClick){
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
+
+        }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun ShoppingListAppPreview() {
-    ShoppingListApp()
-}
-
-
