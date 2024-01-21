@@ -5,9 +5,9 @@ Welcome to the Shopping List App! This simple app allows you to manage your shop
 ## Screenshots
 
 ### Shopping List Editor
-![Shopping List Editor](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/e145c522-dd5e-4d70-992c-220c601492a2)
+![ShoppingListEditor](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/8b861936-6d06-417b-b28b-8fe7e2b05d4f)
 ### Complete Shopping List
-![Complete Shopping List](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/277dd332-a602-43ee-b296-1d253e1ef715)
+![CompleteShoppingList](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/33ee5515-8f7f-4b5e-849e-4906df1d9c47)
 
 ## Features
 
