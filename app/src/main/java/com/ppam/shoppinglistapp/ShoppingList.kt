@@ -1,5 +1,10 @@
 package com.ppam.shoppinglistapp
 
+import android.Manifest
+import android.content.Context
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +25,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -41,6 +47,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.navigation.NavController
 
 
 val customTextStyle = TextStyle(
@@ -50,7 +58,13 @@ val customTextStyle = TextStyle(
 )
 
 @Composable
-fun ShoppingListApp() {
+fun ShoppingListApp(
+    locationUtils: LocationUtils,
+    viewModel: LocationViewModel,
+    navController: NavController,
+    context: Context,
+    address: String
+) {
 
     // shoppingItems
     var sItems by remember { 
@@ -68,6 +82,34 @@ fun ShoppingListApp() {
     var itemQuantity by remember {
         mutableStateOf("")
     }
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            if(permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true &&
+                permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
+                // I have access to location
+                locationUtils.requestLocationUpdates(viewModel = viewModel)
+            } else {
+                // Ask the permission
+                val rationalRequired = ActivityCompat.shouldShowRequestPermissionRationale (
+                    context as MainActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) || ActivityCompat.shouldShowRequestPermissionRationale(
+                    context as MainActivity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+
+                if(rationalRequired) {
+                    Toast.makeText(context,
+                        "Location Permission is requried for some feature to work!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context,
+                        "Location Permission is required. Please enable it in Android Settings", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
 
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -113,6 +155,7 @@ fun ShoppingListApp() {
                         editedItem?.let {
                             it.name = editedName
                             it.quantity = editedQuantity
+                            it.address = address
                         }
                     })
                 } else {
@@ -142,7 +185,8 @@ fun ShoppingListApp() {
                                         val newItem = ShoppingItem (
                                             id = sItems.size+1,
                                             name = itemName,
-                                            quantity = itemQuantity.toInt()
+                                            quantity = itemQuantity.toInt(),
+                                            address = address
                                         )
                                         sItems = sItems + newItem
                                         showDialog = false
@@ -179,6 +223,22 @@ fun ShoppingListApp() {
                             .fillMaxWidth()
                             .padding(8.dp)
                     )
+                    Button(onClick = {
+                        if(locationUtils.hasLocationPermission(context)) {
+                            locationUtils.requestLocationUpdates(viewModel)
+                            navController.navigate("locationScreen") {
+                                this.launchSingleTop
+                            }
+                        } else {
+                            requestPermissionLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                            ))
+                        }
+                    }) {
+                        Text("Address")
+                    }
                 }
             },
             containerColor = Color.LightGray
@@ -189,7 +249,8 @@ fun ShoppingListApp() {
 data class ShoppingItem(val id:Int,
                         var name: String,
                         var quantity: Int,
-                        var isEditing: Boolean = false
+                        var isEditing: Boolean = false,
+                        var address: String
 )
 
 @Composable
@@ -252,8 +313,17 @@ fun ShoppingListItem(
             ),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
-        Text(text = item.name, modifier = Modifier.padding(8.dp))
-        Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
+        Column(modifier = Modifier.weight(1f).padding(8.dp)) {
+            Row{
+                Text(text = item.name, modifier = Modifier.padding(8.dp))
+                Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
+            }
+            Row(modifier= Modifier.fillMaxWidth()){
+                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                Text(text = item.address)
+            }
+        }
+
         Row(modifier = Modifier.padding(8.dp)){
             IconButton(onClick = onEditClick){
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
@@ -262,14 +332,6 @@ fun ShoppingListItem(
             IconButton(onClick = onDeleteClick){
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
-
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ShoppingListAppPreview() {
-    ShoppingListApp()
 }
