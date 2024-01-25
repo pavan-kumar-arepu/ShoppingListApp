@@ -6,9 +6,9 @@ Welcome to the Shopping List App! This application allows you to efficiently man
 
 ![Add New Item](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/62dfa3cd-6fdf-4b6d-81ec-51662d2b4bd8)
 ![Shopping List Editor](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/8b861936-6d06-417b-b28b-8fe7e2b05d4f)
-![whileLocationSelection](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/6f272169-d6bc-4bd3-b220-5b82c9bc4f1d)
-![AddressButton](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/6af000eb-067f-48f8-92b3-ed1fb08cc175)
-![CapuredLocation](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/bcca81a7-6072-439a-86cc-a6b72b38925f)
+![whileLocationSelection](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/bcbadb7a-c633-4b20-9b4d-28afa7046383)
+![AddressButton](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/a43c9b5b-5382-405c-818f-aa9b66fbdb80)
+![CapuredLocation](https://github.com/pavan-kumar-arepu/ShoppingListApp/assets/13812858/c8e9610f-b9be-4efd-8a7c-fd9f5d33add9)
 
 ## Recent Contributions
 
