@@ -42,8 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class ShoppingList {
-}
 
 val customTextStyle = TextStyle(
     fontFamily = FontFamily.Cursive, // Replace with your desired font family
@@ -83,7 +81,6 @@ fun ShoppingListApp() {
         ) {
             Text(text = "Shopping List App",
                 style = customTextStyle)
-
         }
         Divider(
             modifier = Modifier
@@ -91,7 +88,6 @@ fun ShoppingListApp() {
                 .height(5.dp)
                 .background(Color.Gray)
         )
-
 
         Spacer(modifier = Modifier.padding(20.dp))
         Button(
